@@ -1,13 +1,17 @@
 import { Client } from "minio";
 
-const credenctials = {
-  endPoint: process.env.MINIO_ENDPOINT || "localhost",
-  port: parseInt(process.env.MINIO_PORT || "9000"),
-  useSSL: process.env.MINIO_USE_SSL === "true" || false,
-  accessKey: process.env.MINIO_ACCESS_KEY || "admin",
-  secretKey: process.env.MINIO_SECRET_KEY || "admin12345",
+const getEnv = (name: string, fallback: string) => {
+  return process.env[name]?.trim() || fallback;
 };
-const minioClient = new Client(credenctials);
+
+const credentials = {
+  endPoint: getEnv("MINIO_ENDPOINT", "localhost"),
+  port: parseInt(getEnv("MINIO_PORT", "9000"), 10),
+  useSSL: getEnv("MINIO_USE_SSL", "false").toLowerCase() === "true",
+  accessKey: getEnv("MINIO_ACCESS_KEY", "admin"),
+  secretKey: getEnv("MINIO_SECRET_KEY", "admin12345"),
+};
+const minioClient = new Client(credentials);
 
 export const ensureBucketExists = async (bucket: string) => {
   try {

@@ -39,9 +39,9 @@ export const healthCheck = async (req: Request, res: Response) => {
 
     // Check MinIO connectivity
     try {
-        const endpoint = process.env.MINIO_ENDPOINT || "localhost";
-        const port = process.env.MINIO_PORT || "9000";
-        const useSSL = process.env.MINIO_USE_SSL === "true";
+        const endpoint = process.env.MINIO_ENDPOINT?.trim() || "localhost";
+        const port = process.env.MINIO_PORT?.trim() || "9000";
+        const useSSL = (process.env.MINIO_USE_SSL?.trim().toLowerCase() || "false") === "true";
 
         // Try to list buckets to verify connection
         await minioClient.listBuckets();
@@ -56,7 +56,7 @@ export const healthCheck = async (req: Request, res: Response) => {
         healthStatus.services.minio = {
             status: "down",
             message: `MinIO connection failed: ${err.message}`,
-            endpoint: `${process.env.MINIO_USE_SSL === "true" ? "https" : "http"}://${process.env.MINIO_ENDPOINT || "localhost"}:${process.env.MINIO_PORT || "9000"}`,
+            endpoint: `${(process.env.MINIO_USE_SSL?.trim().toLowerCase() || "false") === "true" ? "https" : "http"}://${process.env.MINIO_ENDPOINT?.trim() || "localhost"}:${process.env.MINIO_PORT?.trim() || "9000"}`,
         };
     }
 
