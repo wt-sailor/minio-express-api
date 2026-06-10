@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: storage-api
+    container_name: storage-api-test
     ports:
       - "${PORT:-4000}:4000"
     env_file:
