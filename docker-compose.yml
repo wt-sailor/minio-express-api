@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     container_name: storage-api-test
     ports:
-      - "${PORT:-4000}:4000"
+      - "${PORT:-4200}:4000"
     env_file:
       - .env
     networks:
