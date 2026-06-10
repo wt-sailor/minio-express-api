@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  storage-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: storage-api
+    ports:
+      - "${PORT:-4000}:4000"
+    env_file:
+      - .env
+    networks:
+      - storage-network
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512M
+        reservations:
+          cpus: "0.5"
+          memory: 256M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    restart: unless-stopped
+
+networks:
+  storage-network:
+    driver: bridge
+
+volumes:
+  minio_data:
